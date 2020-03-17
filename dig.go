@@ -2,7 +2,6 @@ package dig
 
 import (
 	"errors"
-	"log"
 )
 
 type dict map[string]interface{}
@@ -18,8 +17,6 @@ func NewMap(source dict) *mmap {
 	cache := make(cache)
 
 	recurse(source, cache, "")
-
-	log.Printf("%+v", cache)
 
 	return &mmap{
 		source: source,
@@ -55,7 +52,7 @@ func recurse(m dict, cache cache, pathPrefix string) {
 func (m *mmap) GetValue(path string) (interface{}, error) {
 	getterFunc, ok := m.cache[path]
 	if !ok {
-		return nil,  errors.New("the path does not exist")
+		return nil, errors.New("the path does not exist")
 	}
 
 	return getterFunc(), nil
