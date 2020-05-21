@@ -29,7 +29,14 @@ type mmap struct {
 	cache  cache
 }
 
-func NewMap(source dict) *mmap {
+type Map interface {
+	GetValue(path string) (interface{}, error)
+	SetValue(path string, value interface{}) error
+	Source() dict
+	PropertyPaths() []string
+}
+
+func NewMap(source dict) Map {
 	cache := make(cache)
 
 	recurseDict(source, cache, "")
