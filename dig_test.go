@@ -2,9 +2,10 @@ package dig
 
 import (
 	"encoding/json"
-	"github.com/tidwall/gjson"
 	"log"
 	"testing"
+
+	"github.com/tidwall/gjson"
 )
 
 func TestReadingFromANestedNode(t *testing.T) {
@@ -24,7 +25,7 @@ func TestReadingFromANestedNode(t *testing.T) {
 	}
 }
 
-func BenchmarkVsGJson(b *testing.B) {
+func BenchmarkPerf(b *testing.B) {
 	const jsonStr = `{"a": {"b": {"c": {"d": {"e": {"f": "g"}}}}}}`
 
 	sourceMap := make(map[string]interface{})
@@ -34,21 +35,16 @@ func BenchmarkVsGJson(b *testing.B) {
 	}
 	m := NewMap(sourceMap)
 
-	b.Run("map", func(b *testing.B) {
-		// Simulate pure map fetching performance
-		for i := 0; i < b.N; i++ {
-			_ = sourceMap["a"].
-			(map[string]interface{})["b"].
-			(map[string]interface{})["c"].
-			(map[string]interface{})["d"].
-			(map[string]interface{})["e"].
-			(map[string]interface{})["f"]
-		}
-	})
-
 	b.Run("dig", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			m.GetValue("a.b.c.d.e.f")
+		}
+	})
+
+	b.Run("go-map", func(b *testing.B) {
+		// Simulate pure map fetching performance
+		for i := 0; i < b.N; i++ {
+			_ = sourceMap["a"].(map[string]interface{})["b"].(map[string]interface{})["c"].(map[string]interface{})["d"].(map[string]interface{})["e"].(map[string]interface{})["f"]
 		}
 	})
 
