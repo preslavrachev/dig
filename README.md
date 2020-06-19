@@ -21,6 +21,8 @@ log.Println(b.(string))
 // 42
 ```
 
+**NOTE: Still in development and mainly for educational purposes. Use with caution!**
+
 # Why unstructured?
 
 Most programming languages use (some sort of) structs for structured and maps for unstructured data. While structs are a great choice when one knows the layout of the incoming data, this may often not be the case. This is where generic maps hit the stage.
